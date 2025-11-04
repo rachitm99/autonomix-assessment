@@ -36,8 +36,8 @@ router.post('/generate', authMiddleware, async (req, res) => {
     });
     await savedTranscript.save();
 
-    // Generate tasks with AI
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    // Generate tasks with AI (using Gemini 2.5 Flash Lite - free tier)
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     const prompt = `You are an AI assistant that analyzes meeting transcripts and extracts actionable tasks.
 

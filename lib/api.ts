@@ -42,7 +42,8 @@ export const taskAPI = {
   getTasks: async () => {
     try {
       const response = await api.get('/tasks');
-      return Array.isArray(response.data) ? response.data : [];
+      const data = response.data.tasks || response.data;
+      return Array.isArray(data) ? data : [];
     } catch (error) {
       console.error('Failed to fetch tasks:', error);
       return [];
@@ -51,7 +52,8 @@ export const taskAPI = {
   
   generateTasks: async (transcript: string) => {
     const response = await api.post('/tasks/generate', { transcript });
-    return Array.isArray(response.data) ? response.data : [];
+    const data = response.data.tasks || response.data;
+    return Array.isArray(data) ? data : [];
   },
   
   updateTask: async (id: string, updates: any) => {
