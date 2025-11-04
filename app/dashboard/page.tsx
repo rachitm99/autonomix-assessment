@@ -30,22 +30,19 @@ export default function Dashboard() {
   useEffect(() => {
     if (!user) {
       router.push("/login");
-    }
-  }, [user, router]);
-
-  // Load tasks on mount
-  useEffect(() => {
-    if (user) {
+    } else {
+      // Load tasks when user is authenticated
       loadTasks();
     }
-  }, [user]);
+  }, [user, router]);
 
   const loadTasks = async () => {
     try {
       const data = await taskAPI.getTasks();
-      setTasks(data);
+      setTasks(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error loading tasks:", error);
+      setTasks([]);
     }
   };
 
@@ -53,7 +50,9 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const newTasks = await taskAPI.generateTasks(transcript);
-      setTasks((prev) => [...prev, ...newTasks]);
+      if (Array.isArray(newTasks)) {
+        setTasks((prev) => [...prev, ...newTasks]);
+      }
     } catch (error: any) {
       console.error("Error generating tasks:", error);
       alert(error.response?.data?.error || "Failed to generate tasks. Please try again.");

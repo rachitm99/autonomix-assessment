@@ -40,13 +40,18 @@ export const authAPI = {
 // Task APIs
 export const taskAPI = {
   getTasks: async () => {
-    const response = await api.get('/tasks');
-    return response.data;
+    try {
+      const response = await api.get('/tasks');
+      return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+      console.error('Failed to fetch tasks:', error);
+      return [];
+    }
   },
   
   generateTasks: async (transcript: string) => {
     const response = await api.post('/tasks/generate', { transcript });
-    return response.data;
+    return Array.isArray(response.data) ? response.data : [];
   },
   
   updateTask: async (id: string, updates: any) => {
