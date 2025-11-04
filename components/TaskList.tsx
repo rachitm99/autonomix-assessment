@@ -5,8 +5,8 @@ import { Check, Trash2, AlertCircle, ArrowUp, ArrowRight } from "lucide-react";
 
 interface TaskListProps {
   tasks: Task[];
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
@@ -41,7 +41,7 @@ export default function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
     <div className="space-y-3">
       {tasks.map((task) => (
         <div
-          key={task.id}
+          key={task._id}
           className={`p-4 rounded-lg border-2 transition-all ${
             task.status === "completed"
               ? "bg-gray-50 border-gray-200 opacity-75"
@@ -50,7 +50,7 @@ export default function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
         >
           <div className="flex items-start gap-3">
             <button
-              onClick={() => onToggle(task.id)}
+              onClick={() => onToggle(task._id)}
               className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
                 task.status === "completed"
                   ? "bg-green-500 border-green-500"
@@ -77,14 +77,21 @@ export default function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
                   {getPriorityIcon(task.priority)}
                   {task.priority.toUpperCase()}
                 </span>
-                <span className="text-xs text-gray-500">
-                  {new Date(task.createdAt).toLocaleDateString()}
-                </span>
+                {task.createdAt && (
+                  <span className="text-xs text-gray-500">
+                    {new Date(task.createdAt).toLocaleDateString()}
+                  </span>
+                )}
+                {task.tags && task.tags.length > 0 && (
+                  <span className="text-xs text-indigo-600 font-medium">
+                    {task.tags.join(", ")}
+                  </span>
+                )}
               </div>
             </div>
             
             <button
-              onClick={() => onDelete(task.id)}
+              onClick={() => onDelete(task._id)}
               className="flex-shrink-0 text-gray-400 hover:text-red-600 transition-colors"
             >
               <Trash2 className="w-5 h-5" />

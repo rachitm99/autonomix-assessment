@@ -1,7 +1,9 @@
 export interface Task {
-  id: number;
+  _id: string;
+  id?: number; // Legacy support
   text: string;
   status: "pending" | "completed";
   priority: "high" | "medium" | "low";
-  createdAt: string;
+  tags?: string[];
+  createdAt?: string;
 }
